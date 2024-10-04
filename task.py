@@ -34,13 +34,17 @@ class Record:
         for phone in self.phones:
             if number == phone.value:
                 return phone
-        raise ValueError('Phone number not found')
+        return None
     
     def edit_phone(self, old_number, new_number):
         phone = self.find_phone(old_number)
         if phone:
+            try:
+                new_phone = Phone(new_number)
+            except ValueError as e: 
+                raise ValueError(f'Invalid phone number: {e}')
             self.delete_phone(old_number)
-            self.add_phone(new_number)
+            self.phones.append(new_phone)
         else:
             raise ValueError('Phone number not found')
 
@@ -72,5 +76,8 @@ class AddressBook(UserDict):
 # john.add_phone('0987654321')
 # mark = Record("Mark")
 # mark.add_phone('1112223334') 
+# print(mark.find_phone('1112223334'))
+# mark.edit_phone('1112223334', '1231231231')
 # book.add_record(mark)
+# print(book.find('Mark'))
 # print(book)
